@@ -2,7 +2,7 @@
 node abstraction layer for PROS CLI
 
 ## usage
-run `npm i --save pros-cli-middleware` to add to your project **[NOTE: not yet published to npm]**
+run `npm i --save @purduesigbots/pros-cli-middleware` to add to your project
 
 ## development
 1. clone the repository

@@ -1,11 +1,13 @@
 {
-  "name": "pros-cli-middleware",
-  "version": "1.0.0",
+  "name": "@purduesigbots/pros-cli-middleware",
+  "version": "0.0.6-dev",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rimraf dist/ && babel src --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files"
+    "build": "rimraf dist/ && babel src --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
+    "clean": "rimraf dist/",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
