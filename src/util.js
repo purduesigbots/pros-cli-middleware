@@ -7,8 +7,8 @@ const PREFIX = 'Uc&42BWAaQ'
 export class CLIEmitter extends EventEmitter {
   constructor(cmd, opts) {
     super()
-    this.cmd = cmd;
-    this.opts = opts;
+    this.cmd = cmd
+    this.opts = opts
     this.invokeCommand()
   }
   invokeCommand() {
