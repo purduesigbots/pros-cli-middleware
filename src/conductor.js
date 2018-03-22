@@ -8,6 +8,7 @@ export const fetchTemplate = (query, options) => {
 }
 
 // usage: `try { code = await cli.listTemplates(...) } catch (e) { ... }`
+// or (for non-blocking): `cli.listTemplates(...).then(...).catch(...)`
 export const listTemplates = (notify, log, finalize, query, { offline, online, refresh, limit }={}) => {
   // NOTE: need to do the following shenanigans because there's three-state logic
   // here (undefined, true, false)
@@ -76,6 +77,42 @@ export const createNewProject = (notify, log, finalize, path, version, platform=
         userStr, systemStr, refreshStr,
         path, platform, version
       ].filter(e => e !== '')
+    ), notify, log, finalize
+  )
+}
+export const upgradeProject = (notify, log, finalize, path, version, { install, download, user, system }={}) => {
+  let installStr;
+  if (install == undefined) {
+    installStr = ''
+  } else {
+    installStr = `--${install ? '' : 'no-'}install`
+  }
+  let downloadStr;
+  if (download == undefined) {
+    downloadStr = ''
+  } else {
+    downloadStr = `--${download ? '' : 'no-'}download`
+  }
+  let userStr;
+  if (user === undefined) {
+    userStr = ''
+  } else {
+    userStr = `${user ? '--force-user' : ''}`
+  }
+  let systemStr
+  if (system === undefined) {
+    systemStr = ''
+  } else {
+    systemStr = `${system ? '--force-system' : ''}`
+  }
+  return cliHook(
+    new CLIEmitter(
+      'prosv5', [
+        'c', 'u',
+        version,
+        installStr, downloadStr,
+        userStr, systemStr
+      ].filter(e => e !== ''), path
     ), notify, log, finalize
   )
 }

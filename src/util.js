@@ -5,14 +5,20 @@ const PREFIX = 'Uc&42BWAaQ'
 
 // read data from stdout of a cmd and emit it to handler
 export class CLIEmitter extends EventEmitter {
-  constructor(cmd, opts) {
+  constructor(cmd, opts, cwd) {
     super()
     this.cmd = cmd
     this.opts = opts
+    this.cwd = cwd
     this.invokeCommand()
   }
   invokeCommand() {
-    this.proc = spawn(this.cmd, [...this.opts, '--machine-output'], { shell: true })
+    const procOpts = { shell: true }
+    if (this.cwd) {
+      procOpts.cwd = this.cwd
+    }
+    console.log(this.cmd, this.opts, procOpts)
+    this.proc = spawn(this.cmd, [...this.opts, '--machine-output'], procOpts)
     this.proc.stdout.setEncoding('utf-8')
     this.proc.stdout.on('data', data => {
       for (let e of data.split('\r\n')) {
