@@ -1,20 +1,23 @@
-import { CLIEmitter, cliHook } from './util.js'
+/** @flow */
 
-export const uploadProject = (notify, log, finalize, path, {run, name, slot}={}) => {
+import { CLIEmitter, cliHook } from './util.js'
+import type { Callbacks, UploadProjectOptions } from './types.js'
+
+export const uploadProject = (callbacks: Callbacks, path: string, {run, name, slot}: UploadProjectOptions={}) => {
   let runStr;
-  if (run == undefined) {
+  if (run === undefined) {
     runStr = ''
   } else {
     runStr = `--${run ? '' : 'no-'}run-after`
   }
   let nameStr;
-  if (name == undefined) {
+  if (name === undefined) {
     nameStr = ''
   } else {
     nameStr = `--name ${name}`
   }
   let slotStr;
-  if (slot == undefined) {
+  if (slot === undefined) {
     slotStr = ''
   } else {
     slotStr = `--slot ${slot}`
@@ -25,6 +28,6 @@ export const uploadProject = (notify, log, finalize, path, {run, name, slot}={})
         'u', runStr, nameStr, slotStr
       ].filter(e => e !== ''),
       path
-    ), notify, log, finalize
+    ), callbacks
   )
 }

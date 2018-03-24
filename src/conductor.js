@@ -1,15 +1,25 @@
-import { CLIEmitter, cliHook } from './util.js'
+/** @flow */
 
-export const applyTemplate = (query, options) => {
-  // stub
-}
-export const fetchTemplate = (query, options) => {
-  // stub
-}
+import { CLIEmitter, cliHook } from './util.js'
+import type {
+  Callbacks,
+  ListTemplatesOptions,
+  GetProjectInfoOptions,
+  CreateNewProjectOptions,
+  UpgradeProjectOptions
+} from './types.js'
+
+// export const applyTemplate = (query, options) => {
+//   // stub
+// }
+// export const fetchTemplate = (query, options) => {
+//   // stub
+// }
 
 // usage: `try { code = await cli.listTemplates(...) } catch (e) { ... }`
 // or (for non-blocking): `cli.listTemplates(...).then(...).catch(...)`
-export const listTemplates = (notify, log, finalize, query, { offline, online, refresh, limit }={}) => {
+
+export const listTemplates = (callbacks: Callbacks, query: string, { offline, online, refresh, limit }: ListTemplatesOptions={}): Promise<any> => {
   // NOTE: need to do the following shenanigans because there's three-state logic
   // here (undefined, true, false)
   let offlineStr;
@@ -41,17 +51,30 @@ export const listTemplates = (notify, log, finalize, query, { offline, online, r
         offlineStr, onlineStr, refreshStr,
         `${limit ? '--limit ' + limit : ''}`
       ].filter(e => e !== '')
-    ), notify, log, finalize
+    ), callbacks
   ) // return promise wrapped around spawned cli proc exiting
 }
-export const createTemplate = (path, name, version, options) => {
-  // stub
+// export const createTemplate = (path, name, version, options) => {
+//   // stub
+// }
+
+export const getProjectInfo = (callbacks: Callbacks, path: string, { upgrades }: GetProjectInfoOptions={}) => {
+  let upgradeStr
+  if (upgrades === undefined) {
+    upgradeStr = ''
+  } else {
+    upgradeStr = `--${upgrades ? '' : 'no-'}ls-upgrades`
+  }
+  return cliHook(
+    new CLIEmitter(
+      'prosv5', [
+        'c', 'info-project', upgradeStr
+      ].filter(e => e !== ''), path
+    ), callbacks
+  )
 }
 
-export const getProjectInfo = (options) => {
-  // stub
-}
-export const createNewProject = (notify, log, finalize, path, version, platform='v5', { user, system, refresh }={}) => {
+export const createNewProject = (callbacks: Callbacks, path: string, version: string, platform: string='v5', { user, system, refresh }: CreateNewProjectOptions={}): Promise<any> => {
   let userStr;
   if (user === undefined) {
     userStr = ''
@@ -77,18 +100,19 @@ export const createNewProject = (notify, log, finalize, path, version, platform=
         userStr, systemStr, refreshStr,
         path, platform, version
       ].filter(e => e !== '')
-    ), notify, log, finalize
+    ), callbacks
   )
 }
-export const upgradeProject = (notify, log, finalize, path, version, { install, download, user, system }={}) => {
+
+export const upgradeProject = (callbacks: Callbacks, path: string, version: string, { install, download, user, system }: UpgradeProjectOptions={}): Promise<any> => {
   let installStr;
-  if (install == undefined) {
+  if (install === undefined) {
     installStr = ''
   } else {
     installStr = `--${install ? '' : 'no-'}install`
   }
   let downloadStr;
-  if (download == undefined) {
+  if (download === undefined) {
     downloadStr = ''
   } else {
     downloadStr = `--${download ? '' : 'no-'}download`
@@ -113,6 +137,6 @@ export const upgradeProject = (notify, log, finalize, path, version, { install, 
         installStr, downloadStr,
         userStr, systemStr
       ].filter(e => e !== ''), path
-    ), notify, log, finalize
+    ), callbacks
   )
 }
