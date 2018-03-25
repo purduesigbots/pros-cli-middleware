@@ -31,3 +31,13 @@ export const uploadProject = (callbacks: Callbacks, path: string, {run, name, sl
     ), callbacks
   )
 }
+
+export const testUi = (callbacks: Callbacks) => {
+  return cliHook(
+    new CLIEmitter(
+      'prosv5', [
+        'test'
+      ]
+    ), callbacks
+  )
+}

@@ -28,10 +28,10 @@ export class CLIEmitter extends EventEmitter {
       procOpts = { shell: true }
     }
     console.log(this.cmd, this.opts, procOpts)
-    this.proc = spawn(this.cmd, [...this.opts, '--machine-output'], procOpts)
+    this.proc = spawn(this.cmd, ['--machine-output', ...this.opts], procOpts)
     this.proc.stdout.setEncoding('utf-8')
     this.proc.stdout.on('data', data => {
-      for (let e of data.split('\r\n')) {
+      for (let e of data.split(/\r?\n/)) {
         if (e.startsWith(PREFIX)) {
           let jdata = JSON.parse(e.substr(PREFIX.length))
           let [ primary ] = jdata.type.split('/')
