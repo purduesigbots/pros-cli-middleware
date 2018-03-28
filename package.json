@@ -1,6 +1,6 @@
 {
   "name": "@purduesigbots/pros-cli-middleware",
-  "version": "0.0.9-dev",
+  "version": "0.0.10-dev",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
