@@ -1,12 +1,11 @@
 {
   "name": "@purduesigbots/pros-cli-middleware",
-  "version": "0.0.10-dev",
+  "version": "0.0.11-dev",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "flow": "flow",
-    "build": "flow && rimraf dist/ && babel src --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
+    "build": "rimraf dist/ && tsc",
     "clean": "rimraf dist/",
     "prepublish": "npm run build"
   },
@@ -22,12 +21,9 @@
   },
   "homepage": "https://github.com/purduesigbots/pros-cli-middleware#readme",
   "dependencies": {
-    "rimraf": "^2.6.2"
+    "@types/node": "^9.6.1",
+    "rimraf": "^2.6.2",
+    "typescript": "^2.8.1"
   },
-  "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-flow": "^6.23.0",
-    "flow-bin": "^0.68.0"
-  }
+  "devDependencies": {}
 }

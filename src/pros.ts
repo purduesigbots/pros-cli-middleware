@@ -1,22 +1,20 @@
-/** @flow */
-
 import { CLIEmitter, cliHook } from './util.js'
-import type { Callbacks, UploadProjectOptions } from './types.js'
+import { Callbacks, UploadProjectOptions } from './types.js'
 
 export const uploadProject = (callbacks: Callbacks, path: string, {run, name, slot}: UploadProjectOptions={}) => {
-  let runStr;
+  let runStr: string
   if (run === undefined) {
     runStr = ''
   } else {
     runStr = `--${run ? '' : 'no-'}run-after`
   }
-  let nameStr;
+  let nameStr: string
   if (name === undefined) {
     nameStr = ''
   } else {
     nameStr = `--name ${name}`
   }
-  let slotStr;
+  let slotStr: string
   if (slot === undefined) {
     slotStr = ''
   } else {
