@@ -1,7 +1,7 @@
+/// <reference path="index.d.ts" />
+
 import { ChildProcess, spawn } from 'child_process'
 import { EventEmitter } from 'events'
-
-import { Callbacks } from './types'
 
 const PREFIX = 'Uc&42BWAaQ'
 
@@ -43,7 +43,7 @@ export class CLIEmitter extends EventEmitter {
 }
 
 // fire callbacks as emitter emits events
-export const cliHook = (emitter: CLIEmitter, callbacks: Callbacks): Promise<number> => {
+export const cliHook = (emitter: CLIEmitter, callbacks: pros.Callbacks): Promise<number> => {
   const cb = (c: any) => emitter.proc.stdin.write(`${c}\n`)
   emitter.on('notify', d => callbacks.notify(d))
   emitter.on('log', d => callbacks.log(d))
@@ -52,4 +52,14 @@ export const cliHook = (emitter: CLIEmitter, callbacks: Callbacks): Promise<numb
   return new Promise(
     (resolve, reject) => emitter.on('exit', (code: number) => code === 0 ? resolve(code) : reject(code))
   )
+}
+
+export const argSwitch = (argName: string, yes: string, no: string, value: boolean|null|undefined): string => {
+  let rStr: string
+  if (value === undefined) {
+    rStr = ''
+  } else {
+    rStr = `--${value ? yes + '-' : no + '-'}${argName}`
+  }
+  return rStr
 }

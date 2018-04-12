@@ -1,46 +1,36 @@
-import { CLIEmitter, cliHook } from './util.js'
-import {
-  Callbacks,
-  ListTemplatesOptions,
-  GetProjectInfoOptions,
-  CreateNewProjectOptions,
-  UpgradeProjectOptions
-} from './types.js'
+/// <reference path="index.d.ts" />
 
-// export const applyTemplate = (query, options) => {
-//   // stub
-// }
-// export const fetchTemplate = (query, options) => {
-//   // stub
-// }
+import { CLIEmitter, cliHook, argSwitch } from './util.js'
 
-// usage: `try { code = await cli.listTemplates(...) } catch (e) { ... }`
-// or (for non-blocking): `cli.listTemplates(...).then(...).catch(...)`
-
-export const listTemplates = (callbacks: Callbacks, query: string, { offline, online, refresh, limit }: ListTemplatesOptions={}): Promise<number> => {
-  // NOTE: need to do the following shenanigans because there's three-state logic
-  // here (undefined, true, false)
-  let offlineStr: string
-  if (offline === undefined) {
-    offlineStr = ''
-  } else {
-    offlineStr = `--${offline ? 'allow' : 'no'}-offline`
-  }
-
-  let onlineStr: string
-  if (online === undefined) {
-    onlineStr = ''
-  } else {
-    onlineStr = `--${online ? 'allow' : 'no'}-online`
-  }
-
-  let refreshStr: string
-  if (refresh === undefined) {
-    refreshStr = ''
-  } else {
-    refreshStr = `${refresh ? '--force-refresh' : ''}`
-  }
-
+export const applyTemplate = (callbacks: pros.Callbacks, path: string, query: string, { upgrade, install, download, user, system }: pros.conductor.ApplyTemplateOptions={}): Promise<number> => {
+  let upgradeStr: string = argSwitch('upgrade', '', 'no', upgrade)
+  let installStr: string = argSwitch('install', '', 'no', install)
+  let downloadStr: string = argSwitch('download', '', 'no', download)
+  let userStr: string = argSwitch('upgrade-user-files', '', 'no', user)
+  let systemStr: string = system === undefined ? '' : '--force'
+  return cliHook(
+    new CLIEmitter(
+      'prosv5', [
+        'c', 'apply',
+        upgradeStr, installStr, downloadStr, userStr, systemStr,
+        query
+      ].filter(e => e !== ''), path
+    ), callbacks
+  )
+}
+export const fetchTemplate = (callbacks: pros.Callbacks, query: string): Promise<number> => {
+  return cliHook(
+    new CLIEmitter(
+      'prosv5', [
+        'c', 'fetch', query
+      ]
+    ), callbacks
+  )
+}
+export const listTemplates = (callbacks: pros.Callbacks, query: string, { offline, online, refresh, limit }: pros.conductor.ListTemplatesOptions={}): Promise<number> => {
+  let offlineStr: string = argSwitch('offline', 'allow', 'no', offline)
+  let onlineStr: string = argSwitch('online', 'allow', 'no', online)
+  let refreshStr: string = refresh === undefined ? '' : `${refresh ? '--force-refresh' : ''}`
   return cliHook(
     new CLIEmitter(
       'prosv5', [
@@ -50,19 +40,21 @@ export const listTemplates = (callbacks: Callbacks, query: string, { offline, on
         `${limit ? '--limit ' + limit : ''}`
       ].filter(e => e !== '')
     ), callbacks
-  ) // return promise wrapped around spawned cli proc exiting
+  )
 }
-// export const createTemplate = (path, name, version, options) => {
-//   // stub
-// }
+export const purgeTemplate = (callbacks: pros.Callbacks, query: string, { force }: pros.conductor.PurgeTemplateOptions={}): Promise<number> => {
+  let forceStr = force === undefined ? '' : `${force ? '--force' : ''}`
+  return cliHook(
+    new CLIEmitter(
+      'prosv5', [
+        'c', 'p', forceStr
+      ].filter(e => e !== '')
+    ), callbacks
+  )
+}
 
-export const getProjectInfo = (callbacks: Callbacks, path: string, { upgrades }: GetProjectInfoOptions={}): Promise<number> => {
-  let upgradeStr: string
-  if (upgrades === undefined) {
-    upgradeStr = ''
-  } else {
-    upgradeStr = `--${upgrades ? '' : 'no-'}ls-upgrades`
-  }
+export const getProjectInfo = (callbacks: pros.Callbacks, path: string, { upgrades }: pros.conductor.GetProjectInfoOptions={}): Promise<number> => {
+  let upgradeStr: string = argSwitch('ls-upgrades', '', 'no', upgrades)
   return cliHook(
     new CLIEmitter(
       'prosv5', [
@@ -72,25 +64,10 @@ export const getProjectInfo = (callbacks: Callbacks, path: string, { upgrades }:
   )
 }
 
-export const createNewProject = (callbacks: Callbacks, path: string, version: string, platform: string='v5', { user, system, refresh }: CreateNewProjectOptions={}): Promise<number> => {
-  let userStr: string
-  if (user === undefined) {
-    userStr = ''
-  } else {
-    userStr = `${user ? '--force-user' : ''}`
-  }
-  let systemStr: string
-  if (system === undefined) {
-    systemStr = ''
-  } else {
-    systemStr = `${system ? '--force-system' : ''}`
-  }
-  let refreshStr: string
-  if (refresh === undefined) {
-    refreshStr = ''
-  } else {
-    refreshStr = `${refresh ? '--force-refresh' : ''}`
-  }
+export const createNewProject = (callbacks: pros.Callbacks, path: string, version: string, platform: string='v5', { user, system, refresh }: pros.conductor.CreateNewProjectOptions={}): Promise<number> => {
+  let userStr: string = user === undefined ? '' : `${user ? '--force-user' : ''}`
+  let systemStr: string = system === undefined ? '' : `${system ? '--force-system' : ''}`
+  let refreshStr: string = refresh === undefined ? '' : `${refresh ? '--force-refresh' : ''}`
   return cliHook(
     new CLIEmitter(
       'prosv5', [
@@ -102,31 +79,11 @@ export const createNewProject = (callbacks: Callbacks, path: string, version: st
   )
 }
 
-export const upgradeProject = (callbacks: Callbacks, path: string, version: string, { install, download, user, system }: UpgradeProjectOptions={}): Promise<number> => {
-  let installStr: string
-  if (install === undefined) {
-    installStr = ''
-  } else {
-    installStr = `--${install ? '' : 'no-'}install`
-  }
-  let downloadStr: string
-  if (download === undefined) {
-    downloadStr = ''
-  } else {
-    downloadStr = `--${download ? '' : 'no-'}download`
-  }
-  let userStr: string
-  if (user === undefined) {
-    userStr = ''
-  } else {
-    userStr = `${user ? '--force-user' : ''}`
-  }
-  let systemStr: string
-  if (system === undefined) {
-    systemStr = ''
-  } else {
-    systemStr = `${system ? '--force-system' : ''}`
-  }
+export const upgradeProject = (callbacks: pros.Callbacks, path: string, version: string, { install, download, user, system }: pros.conductor.UpgradeProjectOptions={}): Promise<number> => {
+  let installStr: string = argSwitch('install', '', 'no', install)
+  let downloadStr: string = argSwitch('download', '', 'no', download)
+  let userStr: string = user === undefined ? '' : `${user ? '--force-user' : ''}`
+  let systemStr: string = system === undefined ? '' : `${system ? '--force-system' : ''}`
   return cliHook(
     new CLIEmitter(
       'prosv5', [
