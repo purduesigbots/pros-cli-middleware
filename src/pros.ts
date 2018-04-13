@@ -1,8 +1,7 @@
-/// <reference path="index.d.ts" />
+import { Callbacks, UploadProjectOptions } from './types';
+import { CLIEmitter, cliHook } from './util';
 
-import { CLIEmitter, cliHook } from './util.js'
-
-export const uploadProject = (callbacks: pros.Callbacks, path: string, {run, name, slot}: pros.UploadProjectOptions={}) => {
+export const uploadProject = (callbacks: Callbacks, path: string, {run, name, slot}: UploadProjectOptions={}) => {
   let runStr: string
   if (run === undefined) {
     runStr = ''
@@ -31,7 +30,7 @@ export const uploadProject = (callbacks: pros.Callbacks, path: string, {run, nam
   )
 }
 
-export const testUi = (callbacks: pros.Callbacks) => {
+export const testUi = (callbacks: Callbacks) => {
   return cliHook(
     new CLIEmitter(
       'prosv5', [

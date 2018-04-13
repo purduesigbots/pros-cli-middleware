@@ -1,7 +1,7 @@
-/// <reference path="index.d.ts" />
 
 import { ChildProcess, spawn } from 'child_process'
 import { EventEmitter } from 'events'
+import { Callbacks } from './types';
 
 const PREFIX = 'Uc&42BWAaQ'
 
@@ -43,7 +43,7 @@ export class CLIEmitter extends EventEmitter {
 }
 
 // fire callbacks as emitter emits events
-export const cliHook = (emitter: CLIEmitter, callbacks: pros.Callbacks): Promise<number> => {
+export const cliHook = (emitter: CLIEmitter, callbacks: Callbacks): Promise<number> => {
   const cb = (c: any) => emitter.proc.stdin.write(`${c}\n`)
   emitter.on('notify', d => callbacks.notify(d))
   emitter.on('log', d => callbacks.log(d))
