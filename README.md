@@ -14,7 +14,6 @@ import { listTemplates } from '@purduesigbots/pros-cli-middleware'
 
 all the functions listed below return a promise that resolves when the command exits successfully. this means that there are effectively two ways to call any of these functions:
 
-blocking:
 ```js
 let r
 try {
@@ -24,22 +23,42 @@ try {
 }
 ```
 
-non-blocking:
 ```js
 listTemplates(...).then(r => {...}).catch(e => console.error(e))
 ```
 
 #### conductor
 
-- `listTemplates(callbacks, query, [options])`
-  Return all available templates satisfying `query`.
+- `applyTemplate(callbacks, path, query, [options])`
+  Upgrade or install a template to a PROS project
   - `callbacks`: standard set of UI hooks
-  - `query`: semver-compliant string (e.g. `template@1.0.1` or `^0.7.0`)
+  - `path`: path to PROS project
+  - `query`: semver-compliant string (e.g. `template@1.0.1`)
+  - `options`: an object containing zero or one each of the following fields
+    - `upgrade: boolean`: allow upgrading templates
+    - `install: boolean`: allow installing templates
+    - `download: boolean`: allow downloading templates (if `false`, will only consider local templates)
+    - `user: boolean`: forcibly replace all user files in templates
+    - `system: boolean`: force insertion of system files into the project
+- `fetchTemplate(callbacks, query)`
+  Fetch/dowload a template from a depot
+  - `callbacks`: standard set of UI hooks
+  - `query`: semver-compliant string (e.g. `template` or `template@^0.7.0` or `template@1.0.0`)
+- `listTemplates(callbacks, query, [options])`
+  Return all available templates satisfying `query`
+  - `callbacks`: standard set of UI hooks
+  - `query`: semver-compliant string (e.g. `template` or `template@1.0.1` or `template^0.7.0` or `1.0.0`)
   - `options`: an object containing zero or one each of the following fields
     - `offline: boolean`: return offline templates
     - `online: boolean`: return online templates
     - `refresh: boolean`: force refresh of remote listings
     - `limit: number`: limit number of templates returned
+- `purgeTemplate(callbacks, query, [options])`
+  Purge templates satisfying `query` from the local cache
+  - `callbacks`: standard set of UI hooks
+  - `query`: semver-compliant string (e.g. `template` or `template@1.0.1` or `template^0.7.0` or `1.0.01)
+  - `options`: an object containing zero or one each of the following fields
+    - `force`: do not prompt for removal of multiple templates
 - `getProjectInfo(callbacks, path, [options])`
   Return information about a PROS project
   - `callbacks`: standard set of UI hooks
@@ -69,6 +88,10 @@ listTemplates(...).then(r => {...}).catch(e => console.error(e))
 
 ### general
 
+- `listDevices(callbacks, [target])`
+  List connected VEX devices
+  - `callbacks`: standard set of UI hooks
+  - `target: 'v5'|'cortex`: optionally limit results to those matching the specified target 
 - `uploadProject(callbacks, path, [options])`
   Upload a PROS project
   - `callbacks`: standard set of UI hooks
@@ -77,6 +100,38 @@ listTemplates(...).then(r => {...}).catch(e => console.error(e))
     - `run: boolean`: run the program immmediately after uploading
     - `name: string`: name of the project on the uC (only applies for v5-targeted projects)
     - `slot: number`: the slot to which the program will be uploaded on the uC (only applies for v5-targeted projects)
+
+### v5 utility functions
+
+- `listFiles(callbacks, [port])`
+  List files on a connected V5 device
+  - `callbacks`: standard set of UI hooks
+  - `port`: string specifying the port of the device you wish to interact with. if unspecified, the CLI will try to choose a port. if multiple devices are connected, the CLI will prompt for a choice
+- `removeAll(callbacks, [port])`
+  Remove all program files on a connected V5 device
+  - `callbacks`: standard set of UI hooks
+  - `port`: string specifying the port of the device you wish to interact with. if unspecified, the CLI will try to choose a port. if multiple devices are connected, the CLI will prompt for a choice
+- `removeFile(callbacks, file, [options, port])`
+  Remove a program file from a connected V5 device
+  - `callbacks`: standard set of UI hooks
+  - `file`: the file to remove
+  - `options`: an object containing zero or one each of the following keys
+    - `all: boolean`: erase all files matching base name
+  - `port`: string specifying the port of the device you wish to interact with. if unspecified, the CLI will try to choose a port. if multiple devices are connected, the CLI will prompt for a choice
+- `runProgram(callbacks, [file, port])`
+  Run a program on a connected V5 device
+  - `callbacks`: standard set of UI hooks
+  - `file`: the file to run. if unspecified, the CLI will attempt to find the correct name based on the CWD's PROS project (note: this will not work at present-- please specify a file for now)
+  - `port`: string specifying the port of the device you wish to interact with. if unspecified, the CLI will try to choose a port. if multiple devices are connected, the CLI will prompt for a choice
+- `systemStatus(callbacks, [port])`
+  Display information about a connected V5 device
+  - `callbacks`: standard set of UI hooks
+  - `port`: string specifying the port of the device you wish to interact with. if unspecified, the CLI will try to choose a port. if multiple devices are connected, the CLI will prompt for a choice
+- `stopProgram(callbacks, [file, port])`
+  Stop a program on a connected V5 device
+  - `callbacks`: standard set of UI hooks
+  - `file`: the file to run. if unspecified, the CLI will attempt to find the correct name based on the CWD's PROS project (note: this will not work at present-- please specify a file for now)
+  - `port`: string specifying the port of the device you wish to interact with. if unspecified, the CLI will try to choose a port. if multiple devices are connected, the CLI will prompt for a choice
 
 ## callbacks
 
