@@ -8,11 +8,11 @@ export const listDevices = (callbacks: Callbacks, target: 'v5'|'cortex'|void|und
         'lsusb', `${target ? '--target'+target : ''}`
       ].filter(e => e !== '')
     ), callbacks
-  )
-}
+  );
+};
 
 export const uploadProject = (callbacks: Callbacks, path: string, {run, name, slot}: UploadProjectOptions={}): Promise<number> => {
-  let runStr: string = argSwitch('run-after', '', 'no', run)
+  let runStr: string = argSwitch('run-after', '', 'no', run);
   return cliHook(
     new CLIEmitter(
       'prosv5', [
@@ -20,8 +20,8 @@ export const uploadProject = (callbacks: Callbacks, path: string, {run, name, sl
       ].filter(e => e !== ''),
       path
     ), callbacks
-  )
-}
+  );
+};
 
 export const testUi = (callbacks: Callbacks) => {
   return cliHook(
@@ -30,5 +30,5 @@ export const testUi = (callbacks: Callbacks) => {
         'test'
       ]
     ), callbacks
-  )
-}
+  );
+};
