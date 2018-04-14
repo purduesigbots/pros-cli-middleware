@@ -1,29 +1,22 @@
 import { Callbacks, UploadProjectOptions } from './types';
-import { CLIEmitter, cliHook } from './util';
+import { CLIEmitter, cliHook, argSwitch } from './util';
 
-export const uploadProject = (callbacks: Callbacks, path: string, {run, name, slot}: UploadProjectOptions={}) => {
-  let runStr: string
-  if (run === undefined) {
-    runStr = ''
-  } else {
-    runStr = `--${run ? '' : 'no-'}run-after`
-  }
-  let nameStr: string
-  if (name === undefined) {
-    nameStr = ''
-  } else {
-    nameStr = `--name ${name}`
-  }
-  let slotStr: string
-  if (slot === undefined) {
-    slotStr = ''
-  } else {
-    slotStr = `--slot ${slot}`
-  }
+export const listDevices = (callbacks: Callbacks, target: 'v5'|'cortex'|void|undefined): Promise<number> => {
   return cliHook(
     new CLIEmitter(
       'prosv5', [
-        'u', runStr, nameStr, slotStr
+        'lsusb', `${target ? '--target'+target : ''}`
+      ].filter(e => e !== '')
+    ), callbacks
+  )
+}
+
+export const uploadProject = (callbacks: Callbacks, path: string, {run, name, slot}: UploadProjectOptions={}): Promise<number> => {
+  let runStr: string = argSwitch('run-after', '', 'no', run)
+  return cliHook(
+    new CLIEmitter(
+      'prosv5', [
+        'u', runStr, `${name ? '--name '+name : ''}`, `${slot ? '--slot '+slot : ''}`
       ].filter(e => e !== ''),
       path
     ), callbacks
