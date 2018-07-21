@@ -63,15 +63,17 @@ export const getProjectInfo = (callbacks: Callbacks, path: string, { upgrades }:
   );
 };
 
-export const createNewProject = (callbacks: Callbacks, path: string, version: string, platform: string='v5', { user, system, refresh }: CreateNewProjectOptions={}): Promise<number> => {
+export const createNewProject = (callbacks: Callbacks, path: string, version: string, platform: string='v5', { user, system, refresh, compile, cache }: CreateNewProjectOptions={}): Promise<number> => {
   let userStr: string = user === undefined ? '' : `${user ? '--force-user' : ''}`;
   let systemStr: string = system === undefined ? '' : `${system ? '--force-system' : ''}`;
   let refreshStr: string = refresh === undefined ? '' : `${refresh ? '--force-refresh' : ''}`;
+  let compileStr: string = compile === undefined ? '' : `${compile ? '--compile-after' : ''}`;
+  let cacheStr: string = cache === undefined ? '' : `${cache ? '--build-cache' : ''}`;
   return cliHook(
     new CLIEmitter(
       'prosv5', [
         'c', 'n',
-        userStr, systemStr, refreshStr,
+        userStr, systemStr, refreshStr, compileStr, cacheStr,
         path, platform, version
       ].filter(e => e !== '')
     ), callbacks
