@@ -1,8 +1,24 @@
-import { ChildProcess, spawn } from 'child_process';
+import { exec, ChildProcess, spawn } from 'child_process';
+import { promisify } from 'util';
 import { EventEmitter } from 'events';
 import { Callbacks } from './types';
 
+const pExec = promisify(exec);
 const PREFIX = 'Uc&42BWAaQ';
+let cliVersion: string|undefined = undefined;
+
+export const getVersion = async (): Promise<string> => {
+  if (cliVersion === undefined) {
+    // HACK: docs say that this should return a Promise<{stdout, stderr}>, but
+    //       it seems to just return a string, so we make a dangerous cast
+    const raw: string = await pExec('prosv5 --machine-output --version') as any;
+    const data = JSON.parse(raw.substr(PREFIX.length));
+    cliVersion = data.text;
+    return data.text;
+  } else {
+    return cliVersion;
+  }
+}
 
 // read data from stdout of a cmd and emit it to handler
 export class CLIEmitter extends EventEmitter {
