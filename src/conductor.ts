@@ -71,7 +71,7 @@ export const createNewProject = async (callbacks: Callbacks, path: string, versi
   const cliVersion = await getVersion();
   let compileStr: string = '';
   let cacheStr: string = '';
-  if (gte(cliVersion, '3.0.4')) {
+  if (gte(cliVersion, '3.0.8')) {
      compileStr = compile === undefined ? '' : `${compile ? '--compile-after' : ''}`;
      cacheStr = cache === undefined ? '' : `${cache ? '--build-cache' : ''}`;
   }
