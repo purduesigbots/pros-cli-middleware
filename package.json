@@ -22,8 +22,10 @@
   },
   "homepage": "https://github.com/purduesigbots/pros-cli-middleware#readme",
   "dependencies": {
+    "@types/node": "^9.6.4",
+    "@types/semver": "^5.5.0",
     "rimraf": "^2.6.2",
-    "typescript": "^2.8.1",
-    "@types/node": "^9.6.4"
+    "semver": "^5.5.0",
+    "typescript": "^2.8.1"
   }
 }

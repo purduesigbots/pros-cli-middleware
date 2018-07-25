@@ -1,4 +1,5 @@
-import { CLIEmitter, cliHook, argSwitch } from './util';
+import { gte } from 'semver';
+import { CLIEmitter, cliHook, argSwitch, getVersion } from './util';
 import { Callbacks, UpgradeProjectOptions, ApplyTemplateOptions, ListTemplatesOptions, PurgeTemplateOptions, GetProjectInfoOptions, CreateNewProjectOptions } from './types';
 
 export const applyTemplate = (callbacks: Callbacks, path: string, query: string, { upgrade, install, download, user, system }: ApplyTemplateOptions={}): Promise<number> => {
@@ -63,15 +64,22 @@ export const getProjectInfo = (callbacks: Callbacks, path: string, { upgrades }:
   );
 };
 
-export const createNewProject = (callbacks: Callbacks, path: string, version: string, platform: string='v5', { user, system, refresh }: CreateNewProjectOptions={}): Promise<number> => {
+export const createNewProject = async (callbacks: Callbacks, path: string, version: string, platform: string='v5', { user, system, refresh, compile, cache }: CreateNewProjectOptions={}): Promise<number> => {
   let userStr: string = user === undefined ? '' : `${user ? '--force-user' : ''}`;
   let systemStr: string = system === undefined ? '' : `${system ? '--force-system' : ''}`;
   let refreshStr: string = refresh === undefined ? '' : `${refresh ? '--force-refresh' : ''}`;
+  const cliVersion = await getVersion();
+  let compileStr: string = '';
+  let cacheStr: string = '';
+  if (gte(cliVersion, '3.0.8')) {
+     compileStr = compile === undefined ? '' : `${compile ? '--compile-after' : ''}`;
+     cacheStr = cache === undefined ? '' : `${cache ? '--build-cache' : ''}`;
+  }
   return cliHook(
     new CLIEmitter(
       'prosv5', [
         'c', 'n',
-        userStr, systemStr, refreshStr,
+        userStr, systemStr, refreshStr, compileStr, cacheStr,
         path, platform, version
       ].filter(e => e !== '')
     ), callbacks
