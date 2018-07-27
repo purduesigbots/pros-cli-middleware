@@ -56,7 +56,7 @@ listTemplates(...).then(r => {...}).catch(e => console.error(e))
 - `purgeTemplate(callbacks, query, [options])`
   Purge templates satisfying `query` from the local cache
   - `callbacks`: standard set of UI hooks
-  - `query`: semver-compliant string (e.g. `template` or `template@1.0.1` or `template^0.7.0` or `1.0.01)
+  - `query`: semver-compliant string (e.g. `template` or `template@1.0.1` or `template^0.7.0` or `1.0.0`)
   - `options`: an object containing zero or one each of the following fields
     - `force`: do not prompt for removal of multiple templates
 - `getProjectInfo(callbacks, path, [options])`
@@ -75,13 +75,15 @@ listTemplates(...).then(r => {...}).catch(e => console.error(e))
     - `user: boolean`: forcibly replace all user files in templates
     - `system: boolean`: forcibly replace all system files in templates
     - `refresh: boolean`: force refresh of remote listings
+    - `compile: boolean`: compile the project immediately after creation from version 1.0.0 (CLI version >=3.0.8)
+    - `cache: boolean`: compile the project immediately after creation and build compile_commands.json file for cquery from version 1.0.0 (CLI version >=3.0.8)
 - `upgradeProject(callbacks, path, version, [options])`
   Upgrade a PROS project
   - `callbacks`: standard set of UI hooks
   - `path`: path to PROS project
   - `version`: version to upgrade project to
   - `options`: an object containing zero or one each of the following fields
-    - `install: boolean`: <missing docs>
+    - `install: boolean`: install libraries that are not already installed
     - `download: boolean`: download templates if not present locally (otherwise use latest available locally)
     - `user: boolean`: forcibly replace all user files in templates
     - `system: boolean` forcibly replace all system files in templates
@@ -91,7 +93,7 @@ listTemplates(...).then(r => {...}).catch(e => console.error(e))
 - `listDevices(callbacks, [target])`
   List connected VEX devices
   - `callbacks`: standard set of UI hooks
-  - `target: 'v5'|'cortex`: optionally limit results to those matching the specified target 
+  - `target: 'v5'|'cortex`: optionally limit results to those matching the specified target
 - `uploadProject(callbacks, path, [options])`
   Upload a PROS project
   - `callbacks`: standard set of UI hooks
