@@ -1,6 +1,6 @@
 import { gte } from 'semver';
 import { CLIEmitter, cliHook, argSwitch, getVersion } from './util';
-import { Callbacks, UpgradeProjectOptions, ApplyTemplateOptions, ListTemplatesOptions, PurgeTemplateOptions, GetProjectInfoOptions, CreateNewProjectOptions } from './types';
+import { Callbacks, UpgradeProjectOptions, ApplyTemplateOptions, ListTemplatesOptions, PurgeTemplateOptions, GetProjectInfoOptions, CreateNewProjectOptions, BuildCompileCommandsOptions } from './types';
 
 export const applyTemplate = (callbacks: Callbacks, path: string, query: string, { upgrade, install, download, user, system }: ApplyTemplateOptions={}): Promise<number> => {
   let upgradeStr: string = argSwitch('upgrade', '', 'no', upgrade);
@@ -98,6 +98,23 @@ export const upgradeProject = (callbacks: Callbacks, path: string, version: stri
         version,
         installStr, downloadStr,
         userStr, systemStr
+      ].filter(e => e !== ''), path
+    ), callbacks
+  );
+};
+
+export const buildCompileCommands = (callbacks: Callbacks, path: string, build_args: string[], {suppressOutput, compileCommandsFile, sandbox}: BuildCompileCommandsOptions={}): Promise<number> => {
+  let suppressOutputStr: string = argSwitch('', 'suppress-output', 'show-output', suppressOutput);
+  let compileCommandsFileStr: string = compileCommandsFile === undefined ? '' : `--compile-commands ${compileCommandsFile}`;
+  let sandboxStr: string = sandbox ? '--sandbox': '';
+  return cliHook(
+    new CLIEmitter(
+      'prosv5', [
+        'build-compile-commands',
+        suppressOutputStr,
+        compileCommandsFileStr,
+        sandboxStr,
+        ...build_args
       ].filter(e => e !== ''), path
     ), callbacks
   );
