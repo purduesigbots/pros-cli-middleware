@@ -102,26 +102,3 @@ export const upgradeProject = (callbacks: Callbacks, path: string, version: stri
     ), callbacks
   );
 };
-
-export const buildCompileCommands = async (callbacks: Callbacks, path: string, build_args: string[], {suppressOutput, compileCommandsFile, sandbox}: BuildCompileCommandsOptions={}): Promise<number> => {
-  const cliVersion = await getVersion();
-  let suppressOutputStr: string = '';
-  let compileCommandsFileStr: string = '';
-  let sandboxStr: string = '';
-  if (gte(cliVersion, '3.0.8')) {
-    suppressOutputStr = argSwitch('output', 'suppress', 'show', suppressOutput);
-    compileCommandsFileStr = compileCommandsFile === undefined ? '' : `--compile-commands ${compileCommandsFile}`;
-    sandboxStr = sandbox ? '--sandbox': '';
-  }
-  return cliHook(
-    new CLIEmitter(
-      'prosv5', [
-        'build-compile-commands',
-        suppressOutputStr,
-        compileCommandsFileStr,
-        sandboxStr,
-        ...build_args
-      ].filter(e => e !== ''), path
-    ), callbacks
-  );
-};
