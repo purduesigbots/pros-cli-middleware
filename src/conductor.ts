@@ -104,7 +104,7 @@ export const upgradeProject = (callbacks: Callbacks, path: string, version: stri
 };
 
 export const buildCompileCommands = (callbacks: Callbacks, path: string, build_args: string[], {suppressOutput, compileCommandsFile, sandbox}: BuildCompileCommandsOptions={}): Promise<number> => {
-  let suppressOutputStr: string = argSwitch('', 'suppress-output', 'show-output', suppressOutput);
+  let suppressOutputStr: string = argSwitch('output', 'suppress', 'show', suppressOutput);
   let compileCommandsFileStr: string = compileCommandsFile === undefined ? '' : `--compile-commands ${compileCommandsFile}`;
   let sandboxStr: string = sandbox ? '--sandbox': '';
   return cliHook(
