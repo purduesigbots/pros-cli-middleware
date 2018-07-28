@@ -1,6 +1,6 @@
 import { gte } from 'semver';
 import { CLIEmitter, cliHook, argSwitch, getVersion } from './util';
-import { Callbacks, UpgradeProjectOptions, ApplyTemplateOptions, ListTemplatesOptions, PurgeTemplateOptions, GetProjectInfoOptions, CreateNewProjectOptions, BuildCompileCommandsOptions } from './types';
+import { Callbacks, UpgradeProjectOptions, ApplyTemplateOptions, ListTemplatesOptions, PurgeTemplateOptions, GetProjectInfoOptions, CreateNewProjectOptions } from './types';
 
 export const applyTemplate = (callbacks: Callbacks, path: string, query: string, { upgrade, install, download, user, system }: ApplyTemplateOptions={}): Promise<number> => {
   let upgradeStr: string = argSwitch('upgrade', '', 'no', upgrade);

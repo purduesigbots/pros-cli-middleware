@@ -1,5 +1,6 @@
-import { Callbacks, UploadProjectOptions } from './types';
-import { CLIEmitter, cliHook, argSwitch } from './util';
+import { Callbacks, UploadProjectOptions, BuildCompileCommandsOptions } from './types';
+import { CLIEmitter, cliHook, argSwitch, getVersion } from './util';
+import { gte } from 'semver';
 
 export const listDevices = (callbacks: Callbacks, target: 'v5'|'cortex'|void|undefined): Promise<number> => {
   return cliHook(
