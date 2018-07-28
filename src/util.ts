@@ -73,7 +73,10 @@ export const argSwitch = (argName: string, yes: string, no: string, value: boole
   if (value === undefined) {
     rStr = '';
   } else {
-    rStr = `--${value ? yes + '-' : no + '-'}${argName}`;
+    if (argName) {
+      argName = `-${argName}`;
+    }
+    rStr = `--${value ? yes : no}${argName}`;
   }
   return rStr;
 }
