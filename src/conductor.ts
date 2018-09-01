@@ -27,16 +27,22 @@ export const fetchTemplate = (callbacks: Callbacks, query: string): Promise<numb
     ), callbacks
   );
 };
-export const listTemplates = (callbacks: Callbacks, query: string, { offline, online, refresh, limit }: ListTemplatesOptions={}): Promise<number> => {
+export const listTemplates = async (callbacks: Callbacks, query: string, { offline, online, refresh, limit, target }: ListTemplatesOptions={}): Promise<number> => {
   let offlineStr: string = argSwitch('offline', 'allow', 'no', offline);
   let onlineStr: string = argSwitch('online', 'allow', 'no', online);
   let refreshStr: string = refresh === undefined ? '' : `${refresh ? '--force-refresh' : ''}`;
+  const cliVersion = await getVersion();
+  let targetStr: string = '';
+  if (gte(cliVersion, '3.0.8')) {
+    targetStr = `${target ? '--target ' + target : ''}`;
+  }
   return cliHook(
     new CLIEmitter(
       'prosv5', [
         'c', 'ls-templates',
         `${query || ''}`,
         offlineStr, onlineStr, refreshStr,
+        targetStr,
         `${limit ? '--limit ' + limit : ''}`
       ].filter(e => e !== '')
     ), callbacks
