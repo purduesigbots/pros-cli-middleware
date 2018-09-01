@@ -9,8 +9,13 @@ let cliVersion: string|undefined = undefined;
 
 export const getVersion = async (): Promise<string> => {
   if (cliVersion === undefined) {
-    const raw: {stdout: string, stderr: string } = await pExec('prosv5 --machine-output --version');
-    const data = JSON.parse(raw.stdout.substr(PREFIX.length));
+    // HACK: sometimes this is a string, and sometimes it's a {stdout: string, stderr: string}. not sure why.
+    const raw: any = await pExec('prosv5 --machine-output --version');
+    const data = JSON.parse(
+      typeof raw === 'string' ?
+       raw.substr(PREFIX.length) :
+       raw.stdout.substr(PREFIX.length)
+    );
     cliVersion = data.text;
     return data.text;
   } else {
