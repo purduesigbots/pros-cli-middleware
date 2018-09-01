@@ -9,10 +9,8 @@ let cliVersion: string|undefined = undefined;
 
 export const getVersion = async (): Promise<string> => {
   if (cliVersion === undefined) {
-    // HACK: docs say that this should return a Promise<{stdout, stderr}>, but
-    //       it seems to just return a string, so we make a dangerous cast
-    const raw: string = await pExec('prosv5 --machine-output --version') as any;
-    const data = JSON.parse(raw.substr(PREFIX.length));
+    const raw: {stdout: string, stderr: string } = await pExec('prosv5 --machine-output --version');
+    const data = JSON.parse(raw.stdout.substr(PREFIX.length));
     cliVersion = data.text;
     return data.text;
   } else {

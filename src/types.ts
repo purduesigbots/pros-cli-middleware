@@ -6,7 +6,7 @@ export type Callbacks = {
 };
 
 export type ApplyTemplateOptions = Partial<{upgrade: boolean, install: boolean, download: boolean, user: boolean, system: boolean}>;
-export type ListTemplatesOptions = Partial<{offline: boolean, online: boolean, refresh: boolean, limit: number}>;
+export type ListTemplatesOptions = Partial<{offline: boolean, online: boolean, refresh: boolean, limit: number, target: string}>;
 export type PurgeTemplateOptions = Partial<{force: boolean}>;
 export type GetProjectInfoOptions = Partial<{upgrades: boolean}>;
 export type CreateNewProjectOptions = Partial<{user: boolean, system: boolean, refresh: boolean, compile: boolean, cache: boolean}>;
