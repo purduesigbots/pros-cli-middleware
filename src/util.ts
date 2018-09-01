@@ -77,9 +77,9 @@ export const argSwitch = (argName: string, yes: string, no: string, value: boole
     rStr = '';
   } else {
     if (argName) {
-      argName = `-${argName}`;
+      argName = `${argName}`;
     }
-    rStr = `--${value ? yes : no}${argName}`;
+    rStr = `--${value ? yes : no + '-'}${argName}`;
   }
   return rStr;
 }
