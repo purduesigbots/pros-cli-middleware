@@ -11,6 +11,7 @@ export type PurgeTemplateOptions = Partial<{force: boolean}>;
 export type GetProjectInfoOptions = Partial<{upgrades: boolean}>;
 export type CreateNewProjectOptions = Partial<{user: boolean, system: boolean, refresh: boolean, compile: boolean, cache: boolean}>;
 export type UpgradeProjectOptions = Partial<{install: boolean, download: boolean, user: boolean, system: boolean}>;
+export type BuildCompileCommandsOptions = Partial<{suppressOutput: boolean, compileCommandsFile: string, sandbox: boolean}>;
 
 export type UploadProjectOptions = Partial<{run: boolean, name: string, slot: number}>;
 

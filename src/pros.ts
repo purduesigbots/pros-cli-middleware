@@ -1,5 +1,6 @@
-import { Callbacks, UploadProjectOptions } from './types';
-import { CLIEmitter, cliHook, argSwitch } from './util';
+import { Callbacks, UploadProjectOptions, BuildCompileCommandsOptions } from './types';
+import { CLIEmitter, cliHook, argSwitch, getVersion } from './util';
+import { gte } from 'semver';
 
 export const listDevices = (callbacks: Callbacks, target: 'v5'|'cortex'|void|undefined): Promise<number> => {
   return cliHook(
@@ -19,6 +20,29 @@ export const uploadProject = (callbacks: Callbacks, path: string, {run, name, sl
         'u', runStr, `${name ? '--name '+name : ''}`, `${slot ? '--slot '+slot : ''}`
       ].filter(e => e !== ''),
       path
+    ), callbacks
+  );
+};
+
+export const buildCompileCommands = async (callbacks: Callbacks, path: string, build_args: string[], {suppressOutput, compileCommandsFile, sandbox}: BuildCompileCommandsOptions={}): Promise<number> => {
+  const cliVersion = await getVersion();
+  let suppressOutputStr: string = '';
+  let compileCommandsFileStr: string = '';
+  let sandboxStr: string = '';
+  if (gte(cliVersion, '3.0.8')) {
+    suppressOutputStr = argSwitch('output', 'suppress', 'show', suppressOutput);
+    compileCommandsFileStr = compileCommandsFile === undefined ? '' : `--compile-commands ${compileCommandsFile}`;
+    sandboxStr = sandbox ? '--sandbox': '';
+  }
+  return cliHook(
+    new CLIEmitter(
+      'prosv5', [
+        'build-compile-commands',
+        suppressOutputStr,
+        compileCommandsFileStr,
+        sandboxStr,
+        ...build_args
+      ].filter(e => e !== ''), path
     ), callbacks
   );
 };
