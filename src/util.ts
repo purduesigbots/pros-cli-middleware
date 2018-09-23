@@ -61,11 +61,15 @@ export class CLIEmitter extends EventEmitter {
 
 // fire callbacks as emitter emits events
 export const cliHook = (emitter: CLIEmitter, callbacks: Callbacks): Promise<number> => {
-  const cb = (c: any) => emitter.proc.stdin.write(`${c}\n`);
+  const cb = (c: any) => {
+    console.log(`${c}\n`);
+    return emitter.proc.stdin.write(`${c}\n`);
+  };
   emitter.on('notify', d => callbacks.notify(d));
   emitter.on('log', d => callbacks.log(d));
   emitter.on('finalize', d => callbacks.finalize(d));
   emitter.on('prompt', d => callbacks.prompt(d, cb));
+  emitter.on('input', d => callbacks.input(d, cb));
   return new Promise(
     (resolve, reject) => emitter.on('exit', (code: number) => code === 0 ? resolve(code) : reject(code))
   );

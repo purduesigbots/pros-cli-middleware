@@ -2,7 +2,8 @@ export type Callbacks = {
   notify: (d: any) => void,
   log: (d: any) => void,
   prompt: (d: any, cb: (c: any) => boolean) => void,
-  finalize: (d: any) => void
+  finalize: (d: any) => void,
+  input: (d: any, cb: (c: any) => void) => void
 };
 
 export type ApplyTemplateOptions = Partial<{upgrade: boolean, install: boolean, download: boolean, user: boolean, system: boolean}>;
@@ -16,3 +17,5 @@ export type BuildCompileCommandsOptions = Partial<{suppressOutput: boolean, comp
 export type UploadProjectOptions = Partial<{run: boolean, name: string, slot: number}>;
 
 export type V5RemoveFileOptions = Partial<{all: boolean}>;
+
+export * from './input/interactive';
