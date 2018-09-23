@@ -14,10 +14,17 @@ export type ApplicationConstructor = { new(ApplicationArguments): Application }
 export abstract class Application {
   elements: Component[];
   uuid: string;
+  _update: (d: any) => void;
 
-  constructor({ elements, uuid, __componentFactory }: ApplicationArguments) {
+  constructor({
+    elements,
+    uuid,
+    __componentFactory,
+    _update
+  }: ApplicationArguments) {
     this.elements = elements.map(c => __componentFactory.createInstance(c));
     this.uuid = uuid;
+    this._update = _update;
   }
 
   refresh({ elements, __componentFactory }: ApplicationArguments) {

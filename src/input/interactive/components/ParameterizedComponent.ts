@@ -1,6 +1,6 @@
 import { Component, ComponentArguments } from './component';
 
-type ParameterizedComponentArguments = ComponentArguments & {
+export type ParameterizedComponentArguments = ComponentArguments & {
   uuid: string,
   value: any,
   valid?: boolean
