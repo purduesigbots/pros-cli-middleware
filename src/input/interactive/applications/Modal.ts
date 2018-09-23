@@ -8,8 +8,6 @@ export type ModalArguments = ApplicationArguments & {
   will_abort: boolean
 }
 
-export type ModalConstructor = { new(ModalArguments): Application }
-
 export class Modal extends Application {
   title: string;
   confirm_button: string;
