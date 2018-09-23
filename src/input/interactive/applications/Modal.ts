@@ -1,5 +1,3 @@
-import { ComponentArguments, Component, ComponentFactory } from '../components';
-import { GenericFactory } from '../factory';
 import { Application, ApplicationArguments } from './application';
 
 export type ModalArguments = ApplicationArguments & {
@@ -44,10 +42,10 @@ export class Modal extends Application {
       can_confirm,
       will_abort
     } = args;
-    if (title) this.title = title;
-    if (confirm_button) this.confirm_button = confirm_button;
-    if (cancel_button) this.cancel_button = cancel_button;
-    if (can_confirm) this.can_confirm = can_confirm;
-    if (will_abort) this.will_abort = will_abort;
+    this.title = title;
+    this.confirm_button = confirm_button;
+    this.cancel_button = cancel_button;
+    this.can_confirm = can_confirm;
+    this.will_abort = will_abort;
   }
 }
