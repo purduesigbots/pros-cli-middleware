@@ -2,6 +2,7 @@ import { Application, ApplicationArguments } from './application';
 
 export type ModalArguments = ApplicationArguments & {
   title: string,
+  description?: string,
   confirm_button: string,
   cancel_button: string,
   can_confirm: boolean,
@@ -10,6 +11,7 @@ export type ModalArguments = ApplicationArguments & {
 
 export class Modal extends Application {
   title: string;
+  description?: string;
   confirm_button: string;
   cancel_button: string;
   can_confirm: boolean;
@@ -19,12 +21,14 @@ export class Modal extends Application {
     super(args);
     const {
       title,
+      description,
       confirm_button,
       cancel_button,
       can_confirm,
       will_abort
     } = args;
     this.title = title;
+    this.description = description;
     this.confirm_button = confirm_button;
     this.cancel_button = cancel_button;
     this.can_confirm = can_confirm;
@@ -35,12 +39,14 @@ export class Modal extends Application {
     super.refresh(args);
     const {
       title,
+      description,
       confirm_button,
       cancel_button,
       can_confirm,
       will_abort
     } = args;
     this.title = title;
+    this.description = description
     this.confirm_button = confirm_button;
     this.cancel_button = cancel_button;
     this.can_confirm = can_confirm;
