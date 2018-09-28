@@ -1,9 +1,19 @@
+export type CallbackFunctionArguments = {
+  d: any,
+  output: (c: any) => boolean,
+  kill: () => void
+}
+
+export interface CallbackFunction {
+  (CallbackFunctionArguments): void
+}
+
 export type Callbacks = {
-  notify: (d: any) => void,
-  log: (d: any) => void,
-  prompt: (d: any, cb: (c: any) => boolean) => void,
-  finalize: (d: any) => void,
-  input: (d: any, cb: (c: any) => void) => void
+  notify: CallbackFunction,
+  log: CallbackFunction,
+  prompt: CallbackFunction,
+  finalize: CallbackFunction,
+  input: CallbackFunction
 };
 
 export type ApplyTemplateOptions = Partial<{upgrade: boolean, install: boolean, download: boolean, user: boolean, system: boolean}>;

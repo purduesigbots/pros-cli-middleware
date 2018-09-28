@@ -52,4 +52,23 @@ export class Modal extends Application {
     this.can_confirm = can_confirm;
     this.will_abort = will_abort;
   }
+
+  confirm() {
+    console.log(this);
+    this._update({
+      uuid: this.uuid,
+      event: 'confirm'
+    })
+  }
+
+  cancel() {
+    this._update({
+      uuid: this.uuid,
+      event: 'cancel'
+    });
+
+    if(this.will_abort) {
+      
+    }
+  }
 }

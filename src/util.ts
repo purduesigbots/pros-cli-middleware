@@ -1,7 +1,7 @@
 import { exec, ChildProcess, spawn } from 'child_process';
 import { promisify } from 'util';
 import { EventEmitter } from 'events';
-import { Callbacks } from './types';
+import { Callbacks, CallbackFunctionArguments } from './types';
 
 const pExec = promisify(exec);
 const PREFIX = 'Uc&42BWAaQ';
@@ -61,15 +61,23 @@ export class CLIEmitter extends EventEmitter {
 
 // fire callbacks as emitter emits events
 export const cliHook = (emitter: CLIEmitter, callbacks: Callbacks): Promise<number> => {
-  const cb = (c: any) => {
-    console.log(`${c}\n`);
-    return emitter.proc.stdin.write(`${c}\n`);
-  };
-  emitter.on('notify', d => callbacks.notify(d));
-  emitter.on('log', d => callbacks.log(d));
-  emitter.on('finalize', d => callbacks.finalize(d));
-  emitter.on('prompt', d => callbacks.prompt(d, cb));
-  emitter.on('input', d => callbacks.input(d, cb));
+  const makeArgs = (d: any): CallbackFunctionArguments => {
+    return {
+      d,
+      output: (c: any) => {
+        console.log(`${c}\n`);
+        return emitter.proc.stdin.write(`${c}\n`);
+      },
+      kill: () => {
+        emitter.proc.kill();
+      }
+    }
+  }
+  emitter.on('notify', d => callbacks.notify(makeArgs(d)));
+  emitter.on('log', d => callbacks.log(makeArgs(d)));
+  emitter.on('finalize', d => callbacks.finalize(makeArgs(d)));
+  emitter.on('prompt', d => callbacks.prompt(makeArgs(d)));
+  emitter.on('input', d => callbacks.input(makeArgs(d)));
   return new Promise(
     (resolve, reject) => emitter.on('exit', (code: number) => code === 0 ? resolve(code) : reject(code))
   );

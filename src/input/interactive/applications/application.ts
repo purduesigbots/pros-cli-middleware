@@ -4,6 +4,7 @@ import { GenericFactory } from '../factory';
 export type ApplicationArguments = {
   elements: ComponentArguments[],
   uuid: string,
+  should_exit: boolean,
   etype: string[],
   __componentFactory: ComponentFactory,
   _update: (d: any) => void
@@ -16,6 +17,8 @@ export abstract class Application {
   uuid: string;
   _update: (d: any) => void;
 
+  destroy(): void { }
+
   constructor({
     elements,
     uuid,
@@ -27,8 +30,12 @@ export abstract class Application {
     this._update = _update;
   }
 
-  refresh({ elements, __componentFactory }: ApplicationArguments) {
-    this.elements = elements.map(c => __componentFactory.createInstance(c));
+  refresh({ should_exit, elements, __componentFactory }: ApplicationArguments) {
+    if (should_exit) {
+      this.destroy();
+    } else {
+      this.elements = elements.map(c => __componentFactory.createInstance(c));
+    }
   }
 }
 
