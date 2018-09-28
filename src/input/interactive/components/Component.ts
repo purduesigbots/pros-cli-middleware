@@ -1,4 +1,4 @@
-import { GenericFactory } from '../factory';
+import { GenericFactory } from '../GenericFactory';
 
 export type ComponentArguments = {
   etype: string[],

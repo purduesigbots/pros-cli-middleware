@@ -1,4 +1,4 @@
-export * from './component';
+export * from './Component';
 export * from './ParameterizedComponent';
 export * from './BasicParameterizedComponent';
 export * from './InputBox';

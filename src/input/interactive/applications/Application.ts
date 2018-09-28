@@ -1,5 +1,5 @@
 import { ComponentArguments, Component, ComponentFactory } from '../components';
-import { GenericFactory } from '../factory';
+import { GenericFactory } from '../GenericFactory';
 
 export type ApplicationArguments = {
   elements: ComponentArguments[],
