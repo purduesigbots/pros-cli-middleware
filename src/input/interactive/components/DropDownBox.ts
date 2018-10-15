@@ -1,7 +1,7 @@
 import { BasicParameterizedComponent, BasicParameterizedComponentArguments } from './BasicParameterizedComponent';
 
 export type DropDownBoxArguments = BasicParameterizedComponentArguments & {
-  options: string[]
+  options: any[]
 };
 
 export class DropDownBox extends BasicParameterizedComponent {
@@ -9,6 +9,6 @@ export class DropDownBox extends BasicParameterizedComponent {
 
   constructor(args: DropDownBoxArguments) {
     super(args);
-    this.options = args.options;
+    this.options = args.options.map(e => e.toString());
   }
 }

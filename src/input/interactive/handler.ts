@@ -14,14 +14,18 @@ export class InteractiveInputHandler {
 
   handler({ d, output, kill }: CallbackFunctionArguments): void {
     if (d.type === 'input/interactive') {
+      const killFn = (): void => {
+        kill();
+        this.destroyAll();
+      };
       this.cf.bound_args._update = (d: any): void => {
         output(JSON.stringify(d));
       };
       this.af.bound_args._update = (d: any): void => {
         output(JSON.stringify(d));
       };
-      this.cf.bound_args._kill = kill;
-      this.af.bound_args._kill = kill;
+      this.cf.bound_args._kill = killFn.bind(this);
+      this.af.bound_args._kill = killFn.bind(this);
 
       if (this.apps.has(d.uuid)) {
         this.apps.get(d.uuid).refresh(this.af.resolveArgs(d));
