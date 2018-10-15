@@ -3,7 +3,8 @@ import { GenericFactory } from '../GenericFactory';
 export type ComponentArguments = {
   etype: string[],
   __componentFactory: ComponentFactory,
-  _update: (d: any) => void
+  _update: (d: any) => void,
+  _kill: () => void
 }
 
 export type ComponentConstructor = { new(ComponentArguments): Component }

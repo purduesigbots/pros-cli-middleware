@@ -68,7 +68,7 @@ export class Modal extends Application {
     });
 
     if(this.will_abort) {
-      
+      this.kill();
     }
   }
 }

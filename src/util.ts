@@ -1,3 +1,4 @@
+import { platform } from 'os';
 import { exec, ChildProcess, spawn } from 'child_process';
 import { promisify } from 'util';
 import { EventEmitter } from 'events';
@@ -5,7 +6,7 @@ import { Callbacks, CallbackFunctionArguments } from './types';
 
 const pExec = promisify(exec);
 const PREFIX = 'Uc&42BWAaQ';
-let cliVersion: string|undefined = undefined;
+let cliVersion: string | undefined = undefined;
 
 export const getVersion = async (): Promise<string> => {
   if (cliVersion === undefined) {
@@ -13,8 +14,8 @@ export const getVersion = async (): Promise<string> => {
     const raw: any = await pExec('prosv5 --machine-output --version');
     const data = JSON.parse(
       typeof raw === 'string' ?
-       raw.substr(PREFIX.length) :
-       raw.stdout.substr(PREFIX.length)
+        raw.substr(PREFIX.length) :
+        raw.stdout.substr(PREFIX.length)
     );
     cliVersion = data.text;
     return data.text;
@@ -27,7 +28,7 @@ export const getVersion = async (): Promise<string> => {
 export class CLIEmitter extends EventEmitter {
   cmd: string;
   opts: string[];
-  cwd: string|null|undefined;
+  cwd: string | null | undefined;
   proc: ChildProcess;
   constructor(cmd: string, opts: string[], cwd?: string) {
     super();
@@ -49,7 +50,7 @@ export class CLIEmitter extends EventEmitter {
       for (let e of data.split(/\r?\n/)) {
         if (e.startsWith(PREFIX)) {
           let jdata = JSON.parse(e.substr(PREFIX.length));
-          let [ primary ] = jdata.type.split('/');
+          let [primary] = jdata.type.split('/');
           this.emit(primary, jdata);
         }
       }
@@ -69,7 +70,11 @@ export const cliHook = (emitter: CLIEmitter, callbacks: Callbacks): Promise<numb
         return emitter.proc.stdin.write(`${c}\n`);
       },
       kill: () => {
-        emitter.proc.kill();
+        if (platform() === 'win32') {
+          exec(`taskkill /pid ${emitter.proc.pid} /T /F`);
+        } else {
+          emitter.proc.kill();
+        }
       }
     }
   }
@@ -83,7 +88,7 @@ export const cliHook = (emitter: CLIEmitter, callbacks: Callbacks): Promise<numb
   );
 }
 
-export const argSwitch = (argName: string, yes: string, no: string, value: boolean|null|undefined): string => {
+export const argSwitch = (argName: string, yes: string, no: string, value: boolean | null | undefined): string => {
   let rStr: string;
   if (value === undefined) {
     rStr = '';

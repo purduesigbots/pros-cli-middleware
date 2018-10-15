@@ -7,7 +7,8 @@ export type ApplicationArguments = {
   should_exit: boolean,
   etype: string[],
   __componentFactory: ComponentFactory,
-  _update: (d: any) => void
+  _update: (d: any) => void,
+  _kill: () => void
 }
 
 export type ApplicationConstructor = { new(ApplicationArguments): Application }
@@ -16,6 +17,7 @@ export abstract class Application {
   elements: Component[];
   uuid: string;
   _update: (d: any) => void;
+  kill: () => void;
 
   destroy(): void { }
 
@@ -23,14 +25,17 @@ export abstract class Application {
     elements,
     uuid,
     __componentFactory,
-    _update
+    _update,
+    _kill
   }: ApplicationArguments) {
     this.elements = elements.map(c => __componentFactory.createInstance(c));
     this.uuid = uuid;
     this._update = _update;
+    this.kill = _kill;
   }
 
-  refresh({ should_exit, elements, __componentFactory }: ApplicationArguments) {
+  refresh({ should_exit, elements, __componentFactory, _kill }: ApplicationArguments) {
+    this.kill = _kill;
     if (should_exit) {
       this.destroy();
     } else {

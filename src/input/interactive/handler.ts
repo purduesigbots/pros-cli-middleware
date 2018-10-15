@@ -2,26 +2,39 @@ import { CallbackFunctionArguments } from '../../types';
 import { ComponentFactory, ComponentConstructor } from './components';
 import { ApplicationFactory, ApplicationConstructor, Application } from './applications';
 
-export function createInteractiveInputHandler(components: ComponentConstructor[], applications: ApplicationConstructor[]) {
-  const cf: ComponentFactory = new ComponentFactory(components);
-  const af: ApplicationFactory = new ApplicationFactory(applications, { __componentFactory: cf });
+export class InteractiveInputHandler {
+  cf: ComponentFactory;
+  af: ApplicationFactory;
+  apps: Map<string, Application> = new Map<string, Application>();
 
-  let apps: Map<string, Application> = new Map<string, Application>();
+  constructor(components: ComponentConstructor[], applications: ApplicationConstructor[]) {
+    this.cf = new ComponentFactory(components);
+    this.af = new ApplicationFactory(applications, { __componentFactory: this.cf });
+  }
 
-  return ({ d, output }: CallbackFunctionArguments): void => {
+  handler({ d, output, kill }: CallbackFunctionArguments): void {
     if (d.type === 'input/interactive') {
-      cf.bound_args._update = (d: any): void => {
+      this.cf.bound_args._update = (d: any): void => {
         output(JSON.stringify(d));
       };
-      af.bound_args._update = (d: any): void => {
+      this.af.bound_args._update = (d: any): void => {
         output(JSON.stringify(d));
       };
+      this.cf.bound_args._kill = kill;
+      this.af.bound_args._kill = kill;
 
-      if (apps.has(d.uuid)) {
-        apps.get(d.uuid).refresh(af.resolveArgs(d));
+      if (this.apps.has(d.uuid)) {
+        this.apps.get(d.uuid).refresh(this.af.resolveArgs(d));
       } else {
-        apps.set(d.uuid, af.createInstance(d));
+        this.apps.set(d.uuid, this.af.createInstance(d));
       }
     }
+  }
+
+  destroyAll(): void {
+    console.log('destroying');
+    this.apps.forEach((value, key) => {
+      value.destroy();
+    })
   }
 }

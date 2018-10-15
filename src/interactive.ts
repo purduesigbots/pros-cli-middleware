@@ -1,7 +1,7 @@
 import { CLIEmitter, cliHook } from './util';
 import { Callbacks } from './types';
 
-export const createNewProjectInteractive = async (callbacks: Callbacks): Promise<number> => {
+export const createNewProjectInteractive = (callbacks: Callbacks): Promise<number> => {
   return cliHook(
     new CLIEmitter(
       'prosv5', [
