@@ -52,8 +52,8 @@ export class CLIEmitter extends EventEmitter {
           let jdata = JSON.parse(e.substr(PREFIX.length));
           let [primary] = jdata.type.split('/');
           this.emit(primary, jdata);
-        } else {
-          console.error(e);
+        } else if (e.trim()) {
+          console.log(e);
         }
       }
     });
