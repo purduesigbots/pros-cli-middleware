@@ -1,4 +1,4 @@
-import { platform } from 'os';
+import { platform, EOL } from 'os';
 import { exec, ChildProcess, spawn } from 'child_process';
 import { promisify } from 'util';
 import { EventEmitter } from 'events';
@@ -11,17 +11,22 @@ let cliVersion: string | undefined = undefined;
 export const getVersion = async (): Promise<string> => {
   if (cliVersion === undefined) {
     // HACK: sometimes this is a string, and sometimes it's a {stdout: string, stderr: string}. not sure why.
-    const raw: any = await pExec('prosv5 --machine-output --version');
-    const data = JSON.parse(
-      typeof raw === 'string' ?
-        raw.substr(PREFIX.length) :
-        raw.stdout.substr(PREFIX.length)
-    );
-    cliVersion = data.text;
-    return data.text;
-  } else {
-    return cliVersion;
+    let raw: any = await pExec('prosv5 --machine-output --version');
+    raw = (typeof raw === 'string') ? raw : raw.stdout;
+    for (var line of raw.split(EOL)) {
+      if(!line.startsWith(PREFIX)) {
+        console.error(line);
+        continue;
+      }
+
+      const data = JSON.parse(line.substr(PREFIX.length));
+      if (data.hasOwnProperty("text")) {
+        cliVersion = data.text.trim();
+        break;
+      }
+    }
   }
+  return cliVersion;
 }
 
 // read data from stdout of a cmd and emit it to handler
