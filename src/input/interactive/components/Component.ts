@@ -9,7 +9,9 @@ export type ComponentArguments = {
 
 export type ComponentConstructor = { new(ComponentArguments): Component }
 
-export class Component {}
+export class Component {
+  constructor(_args?: ComponentArguments) {}
+}
 
 export class ComponentFactory extends GenericFactory<Component, ComponentConstructor, ComponentArguments> {
   constructor(classes: ComponentConstructor[], bound_args?: Partial<ComponentArguments>) {
