@@ -1,4 +1,4 @@
-import { Application, ApplicationArguments } from './application';
+import { Application, ApplicationArguments } from './Application';
 
 export type ModalArguments = ApplicationArguments & {
   title: string,
