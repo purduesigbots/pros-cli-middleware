@@ -29,7 +29,10 @@ export class InteractiveInputHandler {
 
       if (this.apps.has(d.uuid)) {
         this.apps.get(d.uuid).refresh(this.af.resolveArgs(d));
-      } else {
+      } else if(d.hasOwnProperty('etype')) {
+        // d has etype attribute, so there should be enough information to
+        // construct object. There is the posibility that we only see an exit
+        // notification from the CLI
         this.apps.set(d.uuid, this.af.createInstance(d));
       }
     }
