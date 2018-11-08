@@ -90,6 +90,7 @@ export const cliHook = (emitter: CLIEmitter, callbacks: Callbacks): Promise<numb
   emitter.on('finalize', d => callbacks.finalize(makeArgs(d)));
   emitter.on('prompt', d => callbacks.prompt(makeArgs(d)));
   emitter.on('input', d => callbacks.input(makeArgs(d)));
+  emitter.on('wakeme', d => emitter.proc.stdin.write('\n'));
   return new Promise(
     (resolve, reject) => emitter.on('exit', (code: number) => code === 0 ? resolve(code) : reject(code))
   );
