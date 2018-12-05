@@ -21,11 +21,13 @@
     "url": "https://github.com/purduesigbots/pros-cli-middleware/issues"
   },
   "homepage": "https://github.com/purduesigbots/pros-cli-middleware#readme",
-  "dependencies": {
+  "devDependencies": {
     "@types/node": "^9.6.4",
     "@types/semver": "^5.5.0",
     "rimraf": "^2.6.2",
-    "semver": "^5.5.0",
     "typescript": "^2.8.1"
+  },
+  "dependencies": {
+    "semver": "^5.5.0"
   }
 }
