@@ -1,4 +1,4 @@
-import { Component, ComponentArguments } from './component';
+import { Component, ComponentArguments } from './Component';
 
 export type ParameterizedComponentArguments = ComponentArguments & {
   uuid: string,
