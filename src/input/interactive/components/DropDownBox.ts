@@ -1,5 +1,8 @@
 import { BasicParameterizedComponent, BasicParameterizedComponentArguments } from './BasicParameterizedComponent';
 
+/**
+ * The object coming from the CLI, used in the constructor
+ */
 export type DropDownBoxArguments = BasicParameterizedComponentArguments & {
   options: any[]
 };

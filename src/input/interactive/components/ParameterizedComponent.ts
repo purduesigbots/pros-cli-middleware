@@ -1,5 +1,8 @@
 import { Component, ComponentArguments } from './Component';
 
+/**
+ * The object coming from the CLI, used in the constructor
+ */
 export type ParameterizedComponentArguments = ComponentArguments & {
   uuid: string,
   value: any,

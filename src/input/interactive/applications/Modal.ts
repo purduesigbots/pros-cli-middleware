@@ -1,5 +1,8 @@
 import { Application, ApplicationArguments } from './Application';
 
+/**
+ * The object coming from the CLI, used in the constructor
+ */
 export type ModalArguments = ApplicationArguments & {
   title: string,
   description?: string,
@@ -9,6 +12,10 @@ export type ModalArguments = ApplicationArguments & {
   will_abort: boolean
 }
 
+/**
+ * A Modal is a pop-up dialog (typically) asking for user input in order to
+ * continue
+ */
 export class Modal extends Application {
   title: string;
   description?: string;

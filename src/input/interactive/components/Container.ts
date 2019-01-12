@@ -1,5 +1,8 @@
 import { Component, ComponentArguments } from './Component';
 
+/**
+ * The object coming from the CLI, used in the constructor
+ */
 export type ContainerArguments = ComponentArguments & {
   title?: string,
   description?: string,

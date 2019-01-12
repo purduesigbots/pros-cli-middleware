@@ -1,17 +1,18 @@
 import { GenericFactory } from '../GenericFactory';
+import { CommonElementArguments } from '../Common';
 
-export type ComponentArguments = {
-  etype: string[],
-  __componentFactory: ComponentFactory,
-  _update: (d: any) => void,
-  _kill: () => void
+/**
+ * The object coming from the CLI, used in the constructor
+ */
+export type ComponentArguments = CommonElementArguments & {
+  etype: string[]
 }
-
-export type ComponentConstructor = { new(ComponentArguments): Component }
 
 export class Component {
   constructor(_args?: ComponentArguments) {}
 }
+
+export type ComponentConstructor = { new(ComponentArguments): Component }
 
 export class ComponentFactory extends GenericFactory<Component, ComponentConstructor, ComponentArguments> {
   constructor(classes: ComponentConstructor[], bound_args?: Partial<ComponentArguments>) {

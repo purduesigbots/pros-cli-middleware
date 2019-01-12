@@ -1,7 +1,12 @@
 import { CallbackFunctionArguments } from '../../types';
 import { ComponentFactory, ComponentConstructor } from './components';
 import { ApplicationFactory, ApplicationConstructor, Application } from './applications';
+import { CommonElementArguments } from './Common'
 
+/**
+ * Directly handles the input/interactive message from the CLI and kicks off
+ * deserializing the Application that was broadcast
+ */
 export class InteractiveInputHandler {
   cf: ComponentFactory;
   af: ApplicationFactory;
@@ -9,23 +14,24 @@ export class InteractiveInputHandler {
 
   constructor(components: ComponentConstructor[], applications: ApplicationConstructor[]) {
     this.cf = new ComponentFactory(components);
-    this.af = new ApplicationFactory(applications, { __componentFactory: this.cf });
+    this.af = new ApplicationFactory(applications);
   }
 
   handler({ d, output, kill }: CallbackFunctionArguments): void {
     if (d.type === 'input/interactive') {
-      const killFn = (): void => {
-        kill();
-        this.destroyAll();
-      };
-      this.cf.bound_args._update = (d: any): void => {
-        output(JSON.stringify(d));
-      };
-      this.af.bound_args._update = (d: any): void => {
-        output(JSON.stringify(d));
-      };
-      this.cf.bound_args._kill = killFn.bind(this);
-      this.af.bound_args._kill = killFn.bind(this);
+      const commonArgs: CommonElementArguments = {
+        _update:  (d: any): void => {
+          output(JSON.stringify(d));
+        },
+        _kill: ((): void => {
+          kill();
+          this.destroyAll();
+        }).bind(this),
+        __componentFactory: this.cf
+      }
+
+      this.cf.bound_args = commonArgs;
+      this.af.bound_args = commonArgs;
 
       if (this.apps.has(d.uuid)) {
         this.apps.get(d.uuid).refresh(this.af.resolveArgs(d));
