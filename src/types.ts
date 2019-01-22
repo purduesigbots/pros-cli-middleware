@@ -31,6 +31,11 @@ export type V5RemoveFileOptions = Partial<{all: boolean}>;
 export type UpdateProjectInteractiveOptions = Partial<{project: string}>;
 export type UploadInteractiveOptions = Partial<{project: string}>;
 
-export class UnsupportedVersionException extends Error {}
+export class UnsupportedVersionException extends Error {
+  constructor(m: string) {
+    super(m);
+    Object.setPrototypeOf(this, UnsupportedVersionException.prototype);
+  }
+}
 
 export * from './input/interactive';
