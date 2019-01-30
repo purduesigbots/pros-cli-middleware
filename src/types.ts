@@ -1,8 +1,19 @@
+export type CallbackFunctionArguments = {
+  d: any,
+  output: (c: any) => boolean,
+  kill: () => void
+}
+
+export interface CallbackFunction {
+  (CallbackFunctionArguments): void
+}
+
 export type Callbacks = {
-  notify: (d: any) => void,
-  log: (d: any) => void,
-  prompt: (d: any, cb: (c: any) => boolean) => void,
-  finalize: (d: any) => void
+  notify: CallbackFunction,
+  log: CallbackFunction,
+  prompt: CallbackFunction,
+  finalize: CallbackFunction,
+  input: CallbackFunction
 };
 
 export type ApplyTemplateOptions = Partial<{upgrade: boolean, install: boolean, download: boolean, user: boolean, system: boolean}>;
@@ -16,3 +27,15 @@ export type BuildCompileCommandsOptions = Partial<{suppressOutput: boolean, comp
 export type UploadProjectOptions = Partial<{run: boolean, name: string, slot: number}>;
 
 export type V5RemoveFileOptions = Partial<{all: boolean}>;
+
+export type UpdateProjectInteractiveOptions = Partial<{project: string}>;
+export type UploadInteractiveOptions = Partial<{project: string}>;
+
+export class UnsupportedVersionException extends Error {
+  constructor(m: string) {
+    super(m);
+    Object.setPrototypeOf(this, UnsupportedVersionException.prototype);
+  }
+}
+
+export * from './input/interactive';
