@@ -45,11 +45,11 @@ export class ProjectTracker {
     return project;
   }
 
-get lastWeakProject(): string {
+  get lastWeakProject(): string {
     return this._last_weak_project;
   }
 
-get lastStrongProject(): string {
+  get lastStrongProject(): string {
     return this._last_strong_project;
   }
 

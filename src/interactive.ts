@@ -26,7 +26,7 @@ export const updateProjectInteractive = async (callbacks: Callbacks, { project }
   const cliVersion = await getVersion();
   if (gt(cliVersion, '3.1.3')) { // TODO: Make this the right version comparison
     if (project === undefined) {
-      project = GlobalProjectTracker.lastWeakProject();
+      project = GlobalProjectTracker.lastWeakProject;
     }
     const projectStr = project ? `--project "${project}"` : '';
     return cliHook(
@@ -45,7 +45,7 @@ export const uploadInteractive = async (callbacks: Callbacks, { project }: Uploa
   const cliVersion = await getVersion();
   if (gt(cliVersion, '3.1.3')) { // TODO: Make this the right version comparison
     if (project === undefined) {
-      project = GlobalProjectTracker.lastWeakProject();
+      project = GlobalProjectTracker.lastWeakProject;
     }
     const projectStr = project ? `--project "${project}"` : '';
     return cliHook(
