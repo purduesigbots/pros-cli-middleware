@@ -3,7 +3,7 @@ import * as fs from 'fs';
 
 type NullableString = string | null;
 
-export class ProjectTracker {
+class ProjectTracker {
   private _last_weak_project: NullableString;
   private _last_strong_project: NullableString;
   private _last_directory: NullableString;
