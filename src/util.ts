@@ -79,6 +79,8 @@ export const cliHook = (emitter: CLIEmitter, callbacks: Callbacks): Promise<numb
         return emitter.proc.stdin.write(`${c}\n`);
       },
       kill: () => {
+        // suppress reject callback when CLI exits to prevent users
+        // from getting notified about it (purduesigbots/pros-cli-middeware#5)
         emitter.suppressExit = true;
         if (platform() === 'win32') {
           exec(`taskkill /pid ${emitter.proc.pid} /T /F`);
