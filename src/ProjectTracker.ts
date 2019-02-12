@@ -12,6 +12,9 @@ export class ProjectTracker {
   }
 
   findProject(path: string, recurseTimes: number = 10): string {
+    if (!path) {
+      return null;
+    }
     path = _path.resolve(path);
     try {
       var stat = fs.lstatSync(path);
@@ -31,8 +34,10 @@ export class ProjectTracker {
   }
 
   visit(path: string, strong: boolean = false): string {
+    if (path) {
+      this._last_directory = _path.dirname(path);
+    }
     const project = this.findProject(path);
-    this._last_directory = _path.dirname(path);
     this._last_weak_project = project;
     if (project != null || strong) {
       this._last_strong_project = project;
