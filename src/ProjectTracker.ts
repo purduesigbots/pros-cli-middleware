@@ -1,7 +1,7 @@
 import * as _path from 'path';
 import * as fs from 'fs';
 
-export class ProjectTracker {
+class ProjectTracker {
   private _last_weak_project: string;
   private _last_strong_project: string;
   private _last_directory: string;
