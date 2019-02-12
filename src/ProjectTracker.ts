@@ -45,7 +45,7 @@ export class ProjectTracker {
     return project;
   }
 
-  lastWeakProject(): string {
+get lastWeakProject(): string {
     return this._last_weak_project;
   }
 
