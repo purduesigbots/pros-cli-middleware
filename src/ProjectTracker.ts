@@ -41,7 +41,7 @@ class ProjectTracker {
     }
     const project = this.findProject(path);
     this._last_weak_project = project;
-    if (project != null || strong) {
+    if (project !== null || strong) {
       this._last_strong_project = project;
     }
     return project;
