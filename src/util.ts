@@ -35,11 +35,13 @@ export class CLIEmitter extends EventEmitter {
   opts: string[];
   cwd: string | null | undefined;
   proc: ChildProcess;
+  suppressExit: boolean;
   constructor(cmd: string, opts: string[], cwd?: string) {
     super();
     this.cmd = cmd;
     this.opts = opts;
     this.cwd = cwd;
+    this.suppressExit = false;
     this.invokeCommand();
   }
   invokeCommand() {
@@ -77,6 +79,7 @@ export const cliHook = (emitter: CLIEmitter, callbacks: Callbacks): Promise<numb
         return emitter.proc.stdin.write(`${c}\n`);
       },
       kill: () => {
+        emitter.suppressExit = true;
         if (platform() === 'win32') {
           exec(`taskkill /pid ${emitter.proc.pid} /T /F`);
         } else {
@@ -92,7 +95,7 @@ export const cliHook = (emitter: CLIEmitter, callbacks: Callbacks): Promise<numb
   emitter.on('input', d => callbacks.input(makeArgs(d)));
   emitter.on('wakeme', d => emitter.proc.stdin.write('\n'));
   return new Promise(
-    (resolve, reject) => emitter.on('exit', (code: number) => code === 0 ? resolve(code) : reject(code))
+    (resolve, reject) => emitter.on('exit', (code: number) => code === 0 || emitter.suppressExit ? resolve(code) : reject(code))
   );
 }
 
