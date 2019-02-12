@@ -4,6 +4,7 @@ import * as fs from 'fs';
 export class ProjectTracker {
   private _last_weak_project: string;
   private _last_strong_project: string;
+  private _last_directory: string;
 
   constructor() {
     this._last_weak_project = null;
@@ -31,6 +32,7 @@ export class ProjectTracker {
 
   visit(path: string, strong: boolean = false): string {
     const project = this.findProject(path);
+    this._last_directory = _path.dirname(path);
     this._last_weak_project = project;
     if (project != null || strong) {
       this._last_strong_project = project;
@@ -44,6 +46,10 @@ export class ProjectTracker {
 
   lastStrongProject(): string {
     return this._last_strong_project;
+  }
+
+  lastDirectory(): string {
+    return this._last_directory;
   }
 }
 

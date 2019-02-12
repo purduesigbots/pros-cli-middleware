@@ -28,6 +28,7 @@ export type UploadProjectOptions = Partial<{run: boolean, name: string, slot: nu
 
 export type V5RemoveFileOptions = Partial<{all: boolean}>;
 
+export type NewProjectInteractiveOptions = Partial<{directory: string}>;
 export type UpdateProjectInteractiveOptions = Partial<{project: string}>;
 export type UploadInteractiveOptions = Partial<{project: string}>;
 
