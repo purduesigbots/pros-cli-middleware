@@ -49,7 +49,7 @@ get lastWeakProject(): string {
     return this._last_weak_project;
   }
 
-  lastStrongProject(): string {
+get lastStrongProject(): string {
     return this._last_strong_project;
   }
 
