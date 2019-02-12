@@ -1,17 +1,19 @@
 import * as _path from 'path';
 import * as fs from 'fs';
 
+type NullableString = string | null;
+
 export class ProjectTracker {
-  private _last_weak_project: string;
-  private _last_strong_project: string;
-  private _last_directory: string;
+  private _last_weak_project: NullableString;
+  private _last_strong_project: NullableString;
+  private _last_directory: NullableString;
 
   constructor() {
     this._last_weak_project = null;
     this._last_strong_project = null;
   }
 
-  findProject(path: string, recurseTimes: number = 10): string {
+  findProject(path: NullableString, recurseTimes: number = 10): NullableString {
     if (!path) {
       return null;
     }
@@ -33,7 +35,7 @@ export class ProjectTracker {
     }
   }
 
-  visit(path: string, strong: boolean = false): string {
+  visit(path: NullableString, strong: boolean = false): NullableString {
     if (path) {
       this._last_directory = _path.dirname(path);
     }
@@ -45,11 +47,11 @@ export class ProjectTracker {
     return project;
   }
 
-  get lastWeakProject(): string {
+  get lastWeakProject(): NullableString {
     return this._last_weak_project;
   }
 
-  get lastStrongProject(): string {
+  get lastStrongProject(): NullableString {
     return this._last_strong_project;
   }
 
