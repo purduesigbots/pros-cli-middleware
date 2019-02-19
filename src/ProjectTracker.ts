@@ -1,9 +1,9 @@
 import * as _path from 'path';
 import * as fs from 'fs';
 
-type NullableString = string | null;
+export type NullableString = string | null;
 
-class ProjectTracker {
+export class ProjectTracker {
   private _last_weak_project: NullableString;
   private _last_strong_project: NullableString;
   private _last_directory: NullableString;
