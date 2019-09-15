@@ -56,9 +56,14 @@ export class CLIEmitter extends EventEmitter {
     this.proc.stdout.on('data', (data: string) => {
       for (let e of data.split(/\r?\n/)) {
         if (e.startsWith(PREFIX)) {
-          let jdata = JSON.parse(e.substr(PREFIX.length));
-          let [primary] = jdata.type.split('/');
-          this.emit(primary, jdata);
+          try {
+            let jdata = JSON.parse(e.substr(PREFIX.length));
+            let [primary] = jdata.type.split('/');
+            this.emit(primary, jdata);
+          } catch (error) {
+            console.error(`Crashing while parsing "${e}"`);
+            throw error;
+          }
         } else if (e.trim()) {
           console.log(e);
         }
