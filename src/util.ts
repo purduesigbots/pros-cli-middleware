@@ -47,7 +47,7 @@ export class CLIEmitter extends EventEmitter {
   invokeCommand() {
     let procOpts: { cwd?: string, shell: boolean };
     if (this.cwd) {
-      procOpts = { cwd: `"${this.cwd}"`, shell: true };
+      procOpts = { cwd: this.cwd, shell: true };
     } else {
       procOpts = { shell: true };
     }
