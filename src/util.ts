@@ -61,9 +61,10 @@ export class CLIEmitter extends EventEmitter {
             let [primary] = jdata.type.split('/');
             this.emit(primary, jdata);
           } catch (error) {
-            console.log(e);
+            console.error(error);
             console.error(`Crashing while parsing "${e}"`);
-            throw error;
+            // Not throwing error to stop error modals from showing on macos
+            // throw error;
           }
         } else if (e.trim()) {
           console.log(e);
