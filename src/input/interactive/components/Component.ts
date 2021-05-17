@@ -12,7 +12,7 @@ export class Component {
   constructor(_args?: ComponentArguments) {}
 }
 
-export type ComponentConstructor = { new(ComponentArguments): Component }
+export type ComponentConstructor = { new(ComponentArguments: ComponentArguments): Component }
 
 export class ComponentFactory extends GenericFactory<Component, ComponentConstructor, ComponentArguments> {
   constructor(classes: ComponentConstructor[], bound_args?: Partial<ComponentArguments>) {

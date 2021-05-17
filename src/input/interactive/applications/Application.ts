@@ -56,7 +56,7 @@ export abstract class Application {
   }
 }
 
-export type ApplicationConstructor = { new(ApplicationArguments): Application }
+export type ApplicationConstructor = { new(ApplicationArguments: ApplicationArguments): Application }
 
 /**
  * Alias to a GenericFactory capable of deserializing an Application

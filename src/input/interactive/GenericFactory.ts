@@ -3,7 +3,7 @@
  *
  * Create a GenericFactory from a base type (e.g. Application or Component)
  */
-export class GenericFactory<T, C extends { new(A): T }, A extends { etype: string[] }> {
+export class GenericFactory<T, C extends { new(A: A): T }, A extends { etype: string[] }> {
   classes: Map<string, C>;
   bound_args: Partial<A>;
 
